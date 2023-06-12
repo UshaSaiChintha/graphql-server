@@ -23,13 +23,17 @@ const typeDefs = gql`
     }
 
     type Query {
-        books: [Book]
+        books: [Book],
+        book(id: ID!): Book
     }
 `
 // resolvers take in the request and work on resolving. It kind of middleware in processing
 const resolvers = {
     Query: {
-        books: () => books
+        books: () => books,
+//        book: (parent, args, context, info) => books.find(book => book.id == args.id)
+        // above line works same as below line
+        book: (_, { id }) => books.find(book => book.id == id)
     }
 }
 
@@ -45,3 +49,27 @@ server.listen().then(({url}) => {
 // Above command shows a message saying server started at running port 4000 which is a default port
 
 // Now we can launch http://localhost:4000/ url and run query server.. where in we can create our queries
+
+
+// Queries -
+
+//// 1. All books
+
+//query ExampleQuery {
+//  books {
+//    id
+//    title
+//    author
+//  }
+//}
+
+
+//// 2. Search a book via an ID
+
+//query ExampleQuery {
+//  book (id: 1) {
+//    id
+//    title
+//    author
+//  }
+//}
