@@ -31,11 +31,26 @@ const typeDefs = gql`
         books: [Book],
         book(id: ID!): Book
     }
+
+    type Mutation {
+        addBook(title: String, author: String): Book
+    }
 `
 const resolvers = {
     Query: {
         books: () => books,
         book: (_, { id }) => books.find(book => book.id == id)
+    },
+    Mutation: {
+        addBook: (_, { title, author }) => {
+            const book = {
+                title: title,
+                author: author,
+                id: books.length + 1
+            }
+            books.push(book)
+            return book
+        }
     }
 }
 
@@ -47,3 +62,12 @@ server.listen().then(({url}) => {
 
 // to run nodemon, the command is
 ////  nodemon index.js
+
+// Mutation - adding a new book
+//mutation {
+//  addBook(title: "Eega", author: "Rajamouli") {
+//    id
+//    title
+//    author
+//  }
+//}
